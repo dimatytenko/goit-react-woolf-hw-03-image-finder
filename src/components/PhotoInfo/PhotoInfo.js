@@ -16,6 +16,7 @@ export class PhotoInfo extends Component {
     page: 1,
     status: FETCH_STATUS.idle,
     error: null,
+    isShowButton: false,
   };
 
   componentDidUpdate(prevProps, prevState) {
@@ -47,6 +48,7 @@ export class PhotoInfo extends Component {
       this.setState(prevState => ({
         photos: [...prevState.photos, ...photos.hits],
         status: FETCH_STATUS.resolved,
+        isShowButton: photos.hits.length === 12,
       }));
     } catch (error) {
       console.log('error', error);
@@ -65,7 +67,7 @@ export class PhotoInfo extends Component {
   };
 
   render() {
-    const { photos, status, error } = this.state;
+    const { photos, status, error, isShowButton } = this.state;
 
     if (status === FETCH_STATUS.idle) {
       return (
@@ -91,7 +93,7 @@ export class PhotoInfo extends Component {
         <>
           <ImageGallery photos={photos} />
           <div className={styles.button}>
-            {photos.length > 0 && (
+            {isShowButton > 0 && (
               <Button
                 onClick={this.handleButtonClick}
                 isLoading={status === FETCH_STATUS.pending}
